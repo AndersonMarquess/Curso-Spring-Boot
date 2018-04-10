@@ -2,10 +2,19 @@ package com.andersonmarques.cursomc.domain;
 
 import java.io.Serializable;
 
-//Sempre implementar o Serializable
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
+//Sempre implementar o Serializable, Entity para informar qual tabela será criada
+@Entity
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	//Informa que será criado a chave primaria
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	
