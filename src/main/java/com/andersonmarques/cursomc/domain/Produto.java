@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 public class Produto implements Serializable {
@@ -22,7 +24,9 @@ public class Produto implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
-	
+
+	//Essa anotação corrige o problema de referencia cíclica, informando que a "referencia da frente já foi chamada".
+	@JsonBackReference
 	//Anotação para definir relacionamento Muitos para muitos, Cria uma entidade chamada Produto_Categoria,
 	//onde ela faz o join do produto_id onde ele for igual ao categoria_id
 	@ManyToMany

@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 //Sempre implementar o Serializable, Entity para informar qual tabela será criada
 @Entity
 public class Categoria implements Serializable {
@@ -21,7 +23,8 @@ public class Categoria implements Serializable {
 	private Integer id;
 	private String nome;
 	
-	
+	//Essa anotação corrige o problema de referencia cíclica
+	@JsonManagedReference
 	//Informa com a anotação que essa será usado na entidade de relacionamento, muitos para muitos, criado na Classe Produto.
 	@ManyToMany(mappedBy="categorias")
 	private List<Produto> produtos = new ArrayList<>();

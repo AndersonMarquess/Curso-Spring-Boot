@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.andersonmarques.cursomc.domain.Categoria;
 import com.andersonmarques.cursomc.repositories.CategoriaRepository;
+import com.andersonmarques.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -18,7 +19,10 @@ public class CategoriaService {
 	//Faz a busca no repositorio com base no id
 	public Categoria buscar(Integer id) {
 		Optional<Categoria> objetoRecebido = repositorio.findById(id);
-		return objetoRecebido.orElse(null);
+		
+		//Se o objeto não for encontrado, é lançado uma exception através de uma lambda para informar o problema.
+		return objetoRecebido.orElseThrow(()-> new ObjectNotFoundException("O Objeto não foi contrado, ID: "+id+
+				", Categoria: "+Categoria.class.getName()));
 	}
 
 }
