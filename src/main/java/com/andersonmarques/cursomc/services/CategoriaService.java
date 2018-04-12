@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.andersonmarques.cursomc.domain.Categoria;
+import com.andersonmarques.cursomc.dto.CategoriaDTO;
 import com.andersonmarques.cursomc.repositories.CategoriaRepository;
 import com.andersonmarques.cursomc.services.exceptions.DataIntegrityException;
 import com.andersonmarques.cursomc.services.exceptions.ObjectNotFoundException;
@@ -66,5 +67,10 @@ public class CategoriaService {
 		//É preciso fazer a conversão de String para Direction na hora de informar o valor
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repositorio.findAll(pageRequest);
+	}
+	
+	//Retorna uma categoria a partir de um DTO
+	public Categoria fromDTO(CategoriaDTO objDTO) {
+		return new Categoria(objDTO.getId(), objDTO.getNome());
 	}
 }
