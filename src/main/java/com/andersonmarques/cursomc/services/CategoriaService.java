@@ -1,5 +1,6 @@
 package com.andersonmarques.cursomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class CategoriaService {
 		}catch(DataIntegrityViolationException erro) {
 			throw new DataIntegrityException("Não é possível remover uma categoria com produtos");
 		}
+	}
+	
+	//Retorna todas as categorias
+	public List<Categoria> findAll(){
+		return repositorio.findAll();
 	}
 
 }

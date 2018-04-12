@@ -1,6 +1,8 @@
 package com.andersonmarques.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andersonmarques.cursomc.domain.Categoria;
+import com.andersonmarques.cursomc.dto.CategoriaDTO;
 import com.andersonmarques.cursomc.services.CategoriaService;
 
 //Anotação do controlador rest
@@ -66,6 +69,20 @@ public class CategoriaResources {
 	public ResponseEntity<Void> delete (@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	
+	@RequestMapping(method=RequestMethod.GET)
+	//Neste caso ele retorna todas as categoria cadastradas ou uma exception
+	public ResponseEntity<List<CategoriaDTO>> findAll () {
+		
+		//FindAll retorna uma LISTA de categorias
+		List<Categoria> objs = service.findAll();
+		
+		//Faz uma lista secundaria, que vai "mapear" cada item da lista objs 
+		//será criado uma categoriaDTO, depois o collect transforma em lista
+		List<CategoriaDTO> objDTOs = objs.stream().map(objeto -> new CategoriaDTO(objeto)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(objDTOs);
 	}
 }
 
