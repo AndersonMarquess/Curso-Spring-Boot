@@ -17,7 +17,7 @@ public class PedidoService {
 	private PedidoRepository repositorio;
 	
 	//Faz a busca no repositorio com base no id
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		Optional<Pedido> objetoRecebido = repositorio.findById(id);
 		
 		//Se o objeto não for encontrado, é lançado uma exception através de uma lambda para informar o problema.

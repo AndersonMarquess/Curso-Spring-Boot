@@ -17,7 +17,7 @@ public class ClienteService {
 	private ClienteRepository repositorio;
 	
 	//Faz a busca no repositorio com base no id
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		Optional<Cliente> objetoRecebido = repositorio.findById(id);
 		
 		//Se o objeto não for encontrado, é lançado uma exception através de uma lambda para informar o problema.

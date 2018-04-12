@@ -26,10 +26,10 @@ public class CategoriaResources {
      //Associando a função ao Rest com método de get.
 	 //O value é o id que será informado na hora de buscar alguma informação
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	 //O Tipo ResponseEntity é a resposta da busca, neste caso ele informa que não sabe o que será retornado <?>
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	 //O Tipo ResponseEntity é a resposta da busca, neste caso ele retorna uma categoria ou uma exception
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		
-		Categoria obj = service.buscar(id);
+		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
 	}
@@ -46,5 +46,13 @@ public class CategoriaResources {
 				.buildAndExpand(obj.getId()).toUri();
 		
 		return ResponseEntity.created(uri).build();
+	}
+	
+	//função que vai receber em formato Json e atualizar o nome de uma categoria já existente
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update (@RequestBody Categoria obj, @PathVariable Integer id){
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 }

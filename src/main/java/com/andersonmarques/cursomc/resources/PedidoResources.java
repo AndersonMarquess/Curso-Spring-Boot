@@ -22,10 +22,10 @@ public class PedidoResources {
      //Associando a função ao Rest com método de get.
 	 //O value é o id que será informado na hora de buscar alguma informação
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	 //O Tipo ResponseEntity é a resposta da busca, neste caso ele informa que não sabe o que será retornado <?>
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	 //O Tipo ResponseEntity é a resposta da busca
+	public ResponseEntity<Pedido> find(@PathVariable Integer id) {
 		
-		Pedido obj = service.buscar(id);
+		Pedido obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
 	}

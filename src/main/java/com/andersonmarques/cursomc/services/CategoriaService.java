@@ -16,8 +16,8 @@ public class CategoriaService {
 	@Autowired 
 	private CategoriaRepository repositorio;
 	
-	//Faz a busca no repositorio com base no id
-	public Categoria buscar(Integer id) {
+	//Faz a busca no repositório com base no id
+	public Categoria find (Integer id) {
 		Optional<Categoria> objetoRecebido = repositorio.findById(id);
 		
 		//Se o objeto não for encontrado, é lançado uma exception através de uma lambda para informar o problema.
@@ -26,10 +26,17 @@ public class CategoriaService {
 	}
 	
 	
-	//Salva a categoria no repositorio
+	//Salva a categoria no repositório
 	public Categoria insert(Categoria obj) {
 		//Torna o id do obj nulo para ele ser adicionado como novo.
 		obj.setId(null);
+		return repositorio.save(obj);
+	}
+	
+	//Atualiza a categoria no repositório
+	public Categoria update(Categoria obj) {
+		find(obj.getId());
+		//Se o id do obj não for nulo, então ele será atualizado.
 		return repositorio.save(obj);
 	}
 
