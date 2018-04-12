@@ -24,5 +24,13 @@ public class CategoriaService {
 		return objetoRecebido.orElseThrow(()-> new ObjectNotFoundException("O Objeto não foi contrado, ID: "+id+
 				", Categoria: "+Categoria.class.getName()));
 	}
+	
+	
+	//Salva a categoria no repositorio
+	public Categoria insert(Categoria obj) {
+		//Torna o id do obj nulo para ele ser adicionado como novo.
+		obj.setId(null);
+		return repositorio.save(obj);
+	}
 
 }

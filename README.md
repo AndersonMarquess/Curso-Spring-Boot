@@ -1,0 +1,1 @@
+﻿Sistema em desenvolvimento, seguindo o curso de Spring do professor Nelio, já é possível cadastrar pessoas, categorias, pedidos, pagamentos, endereços entre outras coisas.
