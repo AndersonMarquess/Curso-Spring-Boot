@@ -1,21 +1,14 @@
 package com.andersonmarques.cursomc.domain;
 
+import com.andersonmarques.cursomc.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.andersonmarques.cursomc.domain.enums.TipoCliente;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Cliente implements Serializable{
@@ -28,8 +21,9 @@ public class Cliente implements Serializable{
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
-	
-	@OneToMany(mappedBy="cliente")
+
+	//O Cascade permite apagar em cascata
+	@OneToMany(mappedBy="cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	//Informa que esse elemento é uma coleção e que nome da tabela que armazenará as informações é TELEFONE.
