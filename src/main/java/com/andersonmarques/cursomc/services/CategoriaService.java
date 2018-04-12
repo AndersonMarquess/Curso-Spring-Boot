@@ -3,10 +3,12 @@ package com.andersonmarques.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.andersonmarques.cursomc.domain.Categoria;
 import com.andersonmarques.cursomc.repositories.CategoriaRepository;
+import com.andersonmarques.cursomc.services.exceptions.DataIntegrityException;
 import com.andersonmarques.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -38,6 +40,16 @@ public class CategoriaService {
 		find(obj.getId());
 		//Se o id do obj não for nulo, então ele será atualizado.
 		return repositorio.save(obj);
+	}
+	
+	//Remover uma categoria com base no ID
+	public void delete (Integer id) {
+		find(id);
+		try {
+			repositorio.deleteById(id);
+		}catch(DataIntegrityViolationException erro) {
+			throw new DataIntegrityException("Não é possível remover uma categoria com produtos");
+		}
 	}
 
 }
