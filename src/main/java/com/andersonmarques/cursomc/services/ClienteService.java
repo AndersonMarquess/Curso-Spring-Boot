@@ -9,10 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.andersonmarques.cursomc.domain.Cidade;
 import com.andersonmarques.cursomc.domain.Cliente;
+import com.andersonmarques.cursomc.domain.Endereco;
+import com.andersonmarques.cursomc.domain.enums.TipoCliente;
 import com.andersonmarques.cursomc.dto.ClienteDTO;
+import com.andersonmarques.cursomc.dto.ClienteNewDTO;
 import com.andersonmarques.cursomc.repositories.ClienteRepository;
+import com.andersonmarques.cursomc.repositories.EnderecoRepository;
 import com.andersonmarques.cursomc.services.exceptions.DataIntegrityException;
 import com.andersonmarques.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -22,6 +28,8 @@ public class ClienteService {
 	//Essa anotação Autowired instância automaticamente a classe ClienteRepository
 	@Autowired 
 	private ClienteRepository repositorio;
+	@Autowired 
+	private EnderecoRepository enderecoRepository;
 	
 	//Faz a busca no repositorio com base no id
 	public Cliente find(Integer id) {
@@ -32,7 +40,18 @@ public class ClienteService {
 				", Cliente: "+Cliente.class.getName()));
 	}
 	
-	//Atualiza a categoria no repositório
+	
+	//Salva o cliente no repositório
+	@Transactional
+	public Cliente insert(Cliente obj) {
+		//Torna o id do obj nulo para ele ser adicionado como novo.
+		obj.setId(null);
+		obj =  repositorio.save(obj);
+		enderecoRepository.saveAll(obj.getEnderecos());
+		return obj; 
+	}
+	
+	//Atualiza o cliente no repositório
 	public Cliente update(Cliente obj) {
 		Cliente clienteExistente = find(obj.getId());
 		
@@ -41,7 +60,7 @@ public class ClienteService {
 		return repositorio.save(clienteExistente);
 	}
 	
-	//Remover uma categoria com base no ID
+	//Remover um cliente com base no ID
 	public void delete (Integer id) {
 		find(id);
 		try {
@@ -51,21 +70,43 @@ public class ClienteService {
 		}
 	}
 	
-	//Retorna todas as categorias
+	//Retorna todas os cliente
 	public List<Cliente> findAll(){
 		return repositorio.findAll();
 	}
 		
-	//Buscar informações das categorias dividido em paginação
+	//Buscar informações dos cliente dividido em paginação
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		//É preciso fazer a conversão de String para Direction na hora de informar o valor
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repositorio.findAll(pageRequest);
 	}
 	
-	//Retorna uma categoria a partir de um DTO
+	//Retorna um cliente a partir de um DTO
 	public Cliente fromDTO(ClienteDTO objDTO) {
 		return new Cliente(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), null, null);
+	}
+	
+	public Cliente fromDTO(ClienteNewDTO objDTO) {
+		Cliente cli1 = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getCpfOuCnpj(), 
+				TipoCliente.toEnum(objDTO.getTipo()));
+		
+		Cidade cid = new Cidade(objDTO.getCidadeId(), null, null);
+		
+		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getBairro(), 
+				objDTO.getCep(), cli1, cid);
+		
+		cli1.getEnderecos().add(end);
+		cli1.getTelefones().add(objDTO.getTelefone1());
+		
+		if(objDTO.getTelefone2() != null) {
+			cli1.getTelefones().add(objDTO.getTelefone2());
+		}
+		if(objDTO.getTelefone3() != null) {
+			cli1.getTelefones().add(objDTO.getTelefone3());
+		}
+		
+		return cli1;
 	}
 	
 	private void updateData(Cliente clienteExistente, Cliente novo) {
