@@ -1,13 +1,22 @@
 package com.andersonmarques.cursomc.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andersonmarques.cursomc.domain.Cliente;
+import com.andersonmarques.cursomc.dto.ClienteDTO;
 import com.andersonmarques.cursomc.services.ClienteService;
 
 //Anotação do controlador rest
@@ -28,5 +37,58 @@ public class ClienteResources {
 		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
+	}
+	
+	
+	//função que vai receber em formato Json e ATUALIZAR o nome de uma cliente já existente
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update (@Valid @RequestBody ClienteDTO objDTO, @PathVariable Integer id){
+		Cliente obj = service.fromDTO(objDTO);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
+	
+	
+	//função que vai receber em formato Json e remover o objeto
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete (@PathVariable Integer id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	
+	@RequestMapping(method=RequestMethod.GET)
+	//Neste caso ele retorna todas os cliente cadastrados ou uma exception
+	public ResponseEntity<List<ClienteDTO>> findAll () {
+		
+		//FindAll retorna uma LISTA de clientes
+		List<Cliente> objs = service.findAll();
+		
+		//Faz uma lista secundaria, que vai "mapear" cada item da lista objs 
+		//será criado um clienteDTO, depois o collect transforma em lista
+		List<ClienteDTO> objDTOs = objs.stream().map(objeto -> new ClienteDTO(objeto)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(objDTOs);
+	}
+	
+	
+	
+	//Vai retornar as clientes de acordo com página
+	@RequestMapping(value="/page", method=RequestMethod.GET)
+	public ResponseEntity<Page<ClienteDTO>> findPage (
+			//Usa parâmetros opcionais, primeiro definimos qual é a variável que vai receber o valor e depois passamos um valor padrão
+			@RequestParam(value="page", defaultValue="0") Integer page, 
+			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage, 
+			@RequestParam(value="orderBy", defaultValue="nome") String orderBy, 
+			@RequestParam(value="direction", defaultValue="ASC") String direction) {
+		
+		//FindAll retorna uma LISTA de clientes
+		Page<Cliente> objs = service.findPage(page, linesPerPage, orderBy, direction);
+		
+		//Faz uma lista secundaria, que vai "mapear" cada item da lista objs seguindo os valores estabelecidos como parâmetro
+		//será criado uma clienteDTO para cada objeto da Page
+		Page<ClienteDTO> objDTOs = objs.map(objeto -> new ClienteDTO(objeto));
+		return ResponseEntity.ok().body(objDTOs);
 	}
 }
