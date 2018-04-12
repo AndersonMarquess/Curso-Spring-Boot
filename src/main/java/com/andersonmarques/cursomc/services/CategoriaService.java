@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.andersonmarques.cursomc.domain.Categoria;
+import com.andersonmarques.cursomc.domain.Cliente;
 import com.andersonmarques.cursomc.dto.CategoriaDTO;
 import com.andersonmarques.cursomc.repositories.CategoriaRepository;
 import com.andersonmarques.cursomc.services.exceptions.DataIntegrityException;
@@ -39,12 +40,16 @@ public class CategoriaService {
 		obj.setId(null);
 		return repositorio.save(obj);
 	}
+
+	
 	
 	//Atualiza a categoria no repositório
 	public Categoria update(Categoria obj) {
-		find(obj.getId());
-		//Se o id do obj não for nulo, então ele será atualizado.
-		return repositorio.save(obj);
+		Categoria categoriaExistente = find(obj.getId());
+		
+		//Atualiza os campos do cliente antigo com base no novo objeto
+		updateData(categoriaExistente, obj);
+		return repositorio.save(categoriaExistente);
 	}
 	
 	//Remover uma categoria com base no ID
@@ -72,5 +77,9 @@ public class CategoriaService {
 	//Retorna uma categoria a partir de um DTO
 	public Categoria fromDTO(CategoriaDTO objDTO) {
 		return new Categoria(objDTO.getId(), objDTO.getNome());
+	}
+	
+	private void updateData(Categoria objExistente, Categoria obj) {
+		objExistente.setNome(obj.getNome());
 	}
 }
