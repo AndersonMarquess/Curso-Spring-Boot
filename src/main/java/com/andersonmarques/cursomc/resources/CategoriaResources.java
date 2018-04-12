@@ -99,7 +99,7 @@ public class CategoriaResources {
 			@RequestParam(value="direction", defaultValue="ASC") String direction) {
 		
 		//FindAll retorna uma LISTA de categorias
-		Page<Categoria> objs = service.findPage(page, linesPerPages, orderBy, direction);
+		Page<Categoria> objs = service.findPage(page, linesPerPage, orderBy, direction);
 		
 		//Faz uma lista secundaria, que vai "mapear" cada item da lista objs seguindo os valores estabelecidos como parâmetro
 		//será criado uma categoriaDTO para cada objeto da Page
