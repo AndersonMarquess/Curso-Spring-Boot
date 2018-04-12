@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -30,7 +29,7 @@ public class Produto implements Serializable {
 	private Double preco;
 
 	//Essa anotação corrige o problema de referencia cíclica, informando que a "referencia da frente já foi chamada".
-	@JsonBackReference
+	@JsonIgnore
 	//Anotação para definir relacionamento Muitos para muitos, Cria uma entidade chamada Produto_Categoria,
 	//onde ela faz o join do produto_id onde ele for igual ao categoria_id
 	@ManyToMany
