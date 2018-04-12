@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.andersonmarques.cursomc.domain.Categoria;
@@ -56,6 +59,13 @@ public class CategoriaService {
 	//Retorna todas as categorias
 	public List<Categoria> findAll(){
 		return repositorio.findAll();
+	}
+	
+	//Buscar informações das categorias dividido em paginação
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		//É preciso fazer a conversão de String para Direction na hora de informar o valor
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return repositorio.findAll(pageRequest);
 	}
 
 }
