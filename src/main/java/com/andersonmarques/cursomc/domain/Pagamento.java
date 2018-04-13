@@ -1,17 +1,14 @@
 package com.andersonmarques.cursomc.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-
 import com.andersonmarques.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
+@JsonTypeInfo(use =JsonTypeInfo.Id.NAME, include =JsonTypeInfo.As.PROPERTY, property ="@type")
 public abstract class Pagamento implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	
