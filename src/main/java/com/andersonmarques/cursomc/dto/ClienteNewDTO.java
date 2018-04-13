@@ -1,21 +1,36 @@
 package com.andersonmarques.cursomc.dto;
 
+import com.andersonmarques.cursomc.services.validation.ClienteInsert;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
+//Anotação personalizada
+@ClienteInsert
 public class ClienteNewDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	
+
+	@NotEmpty(message="Preenchimento obrigatório")
+	@Length(min=5, max=150, message="O Campo deve conter de 5 a 150 caracteres")
 	private String nome;
+
+	@NotEmpty(message="Preenchimento obrigatório")
+	@Email(message="Email inválido")
 	private String email;
+	@NotEmpty(message="Preenchimento obrigatório")
+
 	private String cpfOuCnpj;
 	private Integer tipo;
-	
+	@NotEmpty(message="Preenchimento obrigatório")
 	private String logradouro;
 	private String numero;
 	private String bairro;
+	@NotEmpty(message="Preenchimento obrigatório")
 	private String cep;
-	
+
+	@NotEmpty(message="Preenchimento obrigatório")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;
