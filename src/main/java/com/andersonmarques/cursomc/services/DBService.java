@@ -42,17 +42,17 @@ public class DBService {
         Categoria cat6 = new Categoria(null, "Decoração");
         Categoria cat7 = new Categoria(null, "Perfumaria");
 
-        Produto p1 = new Produto(null, "Computador", 2000.0d);
-        Produto p2 = new Produto(null, "Impressora", 800.0d);
-        Produto p3 = new Produto(null, "Mouse", 80.0d);
-        Produto p4 = new Produto(null, "Mesa de Escritorio", 300.0d);
-        Produto p5 = new Produto(null, "Toalha", 50.0d);
-        Produto p6 = new Produto(null, "Colcha", 200.0d);
-        Produto p7 = new Produto(null, "TV fake color", 1199.0d);
-        Produto p8 = new Produto(null, "Roçadeira", 800.0d);
-        Produto p9 = new Produto(null, "Abajour", 100.0d);
-        Produto p10 = new Produto(null, "Pendente", 180.0d);
-        Produto p11 = new Produto(null, "Shampoo", 90.0d);
+        Produto p1 = new Produto(null, "Computador", 2000.00);
+        Produto p2 = new Produto(null, "Impressora", 800.00);
+        Produto p3 = new Produto(null, "Mouse", 80.00);
+        Produto p4 = new Produto(null, "Mesa de Escritorio", 300.00);
+        Produto p5 = new Produto(null, "Toalha", 50.00);
+        Produto p6 = new Produto(null, "Colcha", 200.00);
+        Produto p7 = new Produto(null, "TV fake color", 1199.00);
+        Produto p8 = new Produto(null, "Roçadeira", 800.00);
+        Produto p9 = new Produto(null, "Abajour", 100.00);
+        Produto p10 = new Produto(null, "Pendente", 180.00);
+        Produto p11 = new Produto(null, "Shampoo", 90.00);
 
         //Colocando na categoria os produtos
         cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));

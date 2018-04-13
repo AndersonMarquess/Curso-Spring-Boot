@@ -4,8 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 @Entity
@@ -131,4 +137,27 @@ public class Pedido implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		NumberFormat numeroFormatadoBR = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido: ");
+		builder.append(getId());
+		builder.append(", Instante: ");
+		builder.append(simpleDateFormat.format(getInstante()));
+		builder.append(", Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append(", Situação do pagamento: ");
+		builder.append(getPagamento().getEstadoPagamento().getDescricao());
+		builder.append("\nDetalhes: \n");
+		for(ItemPedido ip: itens) {
+			builder.append(ip.toString());
+		}
+		builder.append("Valor Total: ");
+		builder.append(numeroFormatadoBR.format(getValorTotal()));
+		builder.append("\n");
+		return builder.toString();
+	}
 }

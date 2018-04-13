@@ -29,6 +29,8 @@ public class PedidoService {
 	private BoletoService boletoService;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	@Autowired
+	private ClienteService clienteService;
 
 	//Faz a busca no repositorio com base no id
 	public Pedido find(Integer id) {
@@ -43,21 +45,26 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
+		
 		//Se o pagamento do obj é uma instancia de PagamentoComBoleto
 		if (obj.getPagamento() instanceof PagamentoComBoleto) {
 			PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
 			boletoService.preeencherPagamentoComBoleto(pagto, obj.getInstante());
 		}
+		
 		repositorio.save(obj);
 		pagamentoRepository.save(obj.getPagamento());
 		for (ItemPedido ip :obj.getItens()) {
 			ip.setDesconto(0d);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);
 		return obj;
 	}
 }

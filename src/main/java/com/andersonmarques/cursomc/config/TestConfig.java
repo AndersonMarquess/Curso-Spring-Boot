@@ -26,6 +26,7 @@ public class TestConfig {
     	if(!"create".equals(strategy)) {
     		return false;
         }
+    	
     	dbService.instantiateTestDatabase();
         return true;
     }
