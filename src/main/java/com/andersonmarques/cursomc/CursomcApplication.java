@@ -1,35 +1,16 @@
 package com.andersonmarques.cursomc;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-
+import com.andersonmarques.cursomc.domain.*;
+import com.andersonmarques.cursomc.domain.enums.EstadoPagamento;
+import com.andersonmarques.cursomc.domain.enums.TipoCliente;
+import com.andersonmarques.cursomc.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.andersonmarques.cursomc.domain.Categoria;
-import com.andersonmarques.cursomc.domain.Cidade;
-import com.andersonmarques.cursomc.domain.Cliente;
-import com.andersonmarques.cursomc.domain.Endereco;
-import com.andersonmarques.cursomc.domain.Estado;
-import com.andersonmarques.cursomc.domain.ItemPedido;
-import com.andersonmarques.cursomc.domain.Pagamento;
-import com.andersonmarques.cursomc.domain.PagamentoComBoleto;
-import com.andersonmarques.cursomc.domain.PagamentoComCartao;
-import com.andersonmarques.cursomc.domain.Pedido;
-import com.andersonmarques.cursomc.domain.Produto;
-import com.andersonmarques.cursomc.domain.enums.EstadoPagamento;
-import com.andersonmarques.cursomc.domain.enums.TipoCliente;
-import com.andersonmarques.cursomc.repositories.CategoriaRepository;
-import com.andersonmarques.cursomc.repositories.CidadeRepository;
-import com.andersonmarques.cursomc.repositories.ClienteRepository;
-import com.andersonmarques.cursomc.repositories.EnderecoRepository;
-import com.andersonmarques.cursomc.repositories.EstadoRepository;
-import com.andersonmarques.cursomc.repositories.ItemPedidoRepository;
-import com.andersonmarques.cursomc.repositories.PagamentoRepository;
-import com.andersonmarques.cursomc.repositories.PedidoRepository;
-import com.andersonmarques.cursomc.repositories.ProdutoRepository;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner {
@@ -61,27 +42,49 @@ public class CursomcApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
-		Categoria cat3 = new Categoria(null, "Jogos");
-		Categoria cat4 = new Categoria(null, "Hardware");
-		Categoria cat5 = new Categoria(null, "Cabos");
-		Categoria cat6 = new Categoria(null, "Acessório");
-		Categoria cat7 = new Categoria(null, "Software");
+		Categoria cat3 = new Categoria(null, "Cama, mesa e banho");
+		Categoria cat4 = new Categoria(null, "Eletrônicos");
+		Categoria cat5 = new Categoria(null, "Jardinagem");
+		Categoria cat6 = new Categoria(null, "Decoração");
+		Categoria cat7 = new Categoria(null, "Perfumaria");
 		
 		Produto p1 = new Produto(null, "Computador", 2000.0d);
 		Produto p2 = new Produto(null, "Impressora", 800.0d);
 		Produto p3 = new Produto(null, "Mouse", 80.0d);
-		
+		Produto p4 = new Produto(null, "Mesa de Escritorio", 300.0d);
+		Produto p5 = new Produto(null, "Toalha", 50.0d);
+		Produto p6 = new Produto(null, "Colcha", 200.0d);
+		Produto p7 = new Produto(null, "TV fake color", 1199.0d);
+		Produto p8 = new Produto(null, "Roçadeira", 800.0d);
+		Produto p9 = new Produto(null, "Abajour", 100.0d);
+		Produto p10 = new Produto(null, "Pendente", 180.0d);
+		Produto p11 = new Produto(null, "Shampoo", 90.0d);
+
 		//Colocando na categoria os produtos
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
-		cat2.getProdutos().addAll(Arrays.asList(p2));
-		
+		cat2.getProdutos().addAll(Arrays.asList(p2, p4));
+		cat3.getProdutos().addAll(Arrays.asList(p5, p6));
+		cat4.getProdutos().addAll(Arrays.asList(p1, p2, p3, p7));
+		cat5.getProdutos().addAll(Arrays.asList(p8));
+		cat6.getProdutos().addAll(Arrays.asList(p9, p10));
+		cat7.getProdutos().addAll(Arrays.asList(p11));
+
 		//Colocando nos produtos as categorias
-		p1.getCategorias().addAll(Arrays.asList(cat1));
-		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
-		p3.getCategorias().addAll(Arrays.asList(cat1));
+		p1.getCategorias().addAll(Arrays.asList(cat1, cat4));
+		p2.getCategorias().addAll(Arrays.asList(cat1, cat2, cat4));
+		p3.getCategorias().addAll(Arrays.asList(cat1, cat4));
+		p4.getCategorias().addAll(Arrays.asList(cat2));
+		p5.getCategorias().addAll(Arrays.asList(cat3));
+		p6.getCategorias().addAll(Arrays.asList(cat3));
+		p7.getCategorias().addAll(Arrays.asList(cat4));
+		p8.getCategorias().addAll(Arrays.asList(cat5));
+		p9.getCategorias().addAll(Arrays.asList(cat6));
+		p10.getCategorias().addAll(Arrays.asList(cat6));
+		p11.getCategorias().addAll(Arrays.asList(cat7));
+
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
-		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11));
 		
 		//Estados e Cidades
 		
