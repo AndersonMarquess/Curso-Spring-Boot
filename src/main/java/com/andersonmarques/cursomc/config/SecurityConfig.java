@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,7 @@ import com.andersonmarques.cursomc.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -38,7 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	//Informa quais endpoint's são públicos
 	public static final String[] PUBLIC_MATCHERS = {"/h2-console/**"};
 	
-	public static final String[] PUBLIC_MATCHERS_GET = {"/produtos/**", "/categorias/**", "/clientes/**"  };
+	public static final String[] PUBLIC_MATCHERS_GET = {"/produtos/**", "/categorias/**" };
+	
+	public static final String[] PUBLIC_MATCHERS_POST = {"/clientes/**" };
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -52,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		//Vai permitir qualquer requisição dos caminhos especificados no array de Public_Matchers
 		//Os caminhos do Public_Matchers_get apenas possibilitará realizar o get como requisição, os outros ele autentica
 		http.authorizeRequests()
+		.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 		.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
 		.antMatchers(PUBLIC_MATCHERS).permitAll()
 		.anyRequest()
