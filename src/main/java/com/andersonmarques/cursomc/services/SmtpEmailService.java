@@ -2,15 +2,14 @@ package com.andersonmarques.cursomc.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 
 public class SmtpEmailService extends AbstractEmailService {
 	
 	//Não fiz a configuração para enviar o email com o gmail no properties
 	
-	@Autowired
-	private EmailService emailService;
+//	@Autowired
+//	private EmailService emailService;
 	
 	private static final Logger log = LoggerFactory.getLogger(SmtpEmailService.class);
 	
