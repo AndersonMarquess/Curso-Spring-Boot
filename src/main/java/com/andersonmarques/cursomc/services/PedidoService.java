@@ -31,6 +31,8 @@ public class PedidoService {
 	private ItemPedidoRepository itemPedidoRepository;
 	@Autowired
 	private ClienteService clienteService;
+	@Autowired
+	private EmailService emailService;
 
 	//Faz a busca no repositorio com base no id
 	public Pedido find(Integer id) {
@@ -64,7 +66,7 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sandOrderConfirmationEmail(obj);
 		return obj;
 	}
 }

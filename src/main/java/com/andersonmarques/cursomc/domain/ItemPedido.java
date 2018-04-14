@@ -114,7 +114,8 @@ public class ItemPedido implements Serializable{
 
 	@Override
 	public String toString() {
-		NumberFormat numeroFormatadoBR = NumberFormat.getInstance(new Locale("pt", "BR"));
+		NumberFormat numeroFormatadoBR = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append(getProduto().getNome());
 		builder.append(", Qted: ");
