@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.andersonmarques.cursomc.domain.Cidade;
 import com.andersonmarques.cursomc.domain.Cliente;
 import com.andersonmarques.cursomc.domain.Endereco;
+import com.andersonmarques.cursomc.domain.enums.Perfil;
 import com.andersonmarques.cursomc.domain.enums.TipoCliente;
 import com.andersonmarques.cursomc.dto.ClienteDTO;
 import com.andersonmarques.cursomc.dto.ClienteNewDTO;
 import com.andersonmarques.cursomc.repositories.ClienteRepository;
 import com.andersonmarques.cursomc.repositories.EnderecoRepository;
+import com.andersonmarques.cursomc.security.UserSS;
+import com.andersonmarques.cursomc.services.exceptions.AuthorizationException;
 import com.andersonmarques.cursomc.services.exceptions.DataIntegrityException;
 import com.andersonmarques.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -34,8 +37,13 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEnconder;
 	
-	//Faz a busca no repositorio com base no id
+	//Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
+		UserSS user = UserService.authenticated();
+		if((user == null || !user.hasRole(Perfil.ADMIN))&& !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> objetoRecebido = repositorio.findById(id);
 		
 		//Se o objeto não for encontrado, é lançado uma exception através de uma lambda para informar o problema.
