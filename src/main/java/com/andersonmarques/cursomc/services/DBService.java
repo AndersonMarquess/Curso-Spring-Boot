@@ -2,6 +2,7 @@ package com.andersonmarques.cursomc.services;
 
 import com.andersonmarques.cursomc.domain.*;
 import com.andersonmarques.cursomc.domain.enums.EstadoPagamento;
+import com.andersonmarques.cursomc.domain.enums.Perfil;
 import com.andersonmarques.cursomc.domain.enums.TipoCliente;
 import com.andersonmarques.cursomc.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,16 +100,22 @@ public class DBService {
         cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
         //Clientes
-        Cliente cli1 = new Cliente(null, "Maria Silva", "mariasilva@email.com", "12345678912", TipoCliente.PESSOAFISICA, passwordEncoder.encode("batata"));
+        Cliente cli1 = new Cliente(null, "Maria Silva", "mariasilva@email.com", "04056497036", TipoCliente.PESSOAFISICA, passwordEncoder.encode("batata"));
         cli1.getTelefones().addAll(Arrays.asList("11-11112222","11-33334444"));
 
+        Cliente cli2 = new Cliente(null, "Silva Maria", "silvaMARIA@email.com", "13886114066", TipoCliente.PESSOAFISICA, passwordEncoder.encode("batata"));
+        cli2.getTelefones().addAll(Arrays.asList("11-55556666","11-77778888"));
+        cli2.addPerfil(Perfil.ADMIN);
+        
         Endereco e1 = new Endereco(null, "Rua flores", "12", "jardim", "1234-999", cli1, c1);
-        Endereco e2 = new Endereco(null, "Avenida Matos", "105","Centro","5678-000", cli1, c2);
+        Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Centro", "5678-000", cli1, c2);
+        Endereco e3 = new Endereco(null, "Avenida Gramas", "105", "Centro", "5678-234", cli2, c2);
 
         cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+        cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-        clienteRepository.saveAll(Arrays.asList(cli1));
-        enderecoRepository.saveAll(Arrays.asList(e1, e2));
+        clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+        enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
         //Pedido
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");

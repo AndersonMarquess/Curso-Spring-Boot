@@ -1,5 +1,6 @@
 package com.andersonmarques.cursomc.domain;
 
+import com.andersonmarques.cursomc.domain.enums.Perfil;
 import com.andersonmarques.cursomc.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable{
@@ -31,16 +33,22 @@ public class Cliente implements Serializable{
 	@OneToMany(mappedBy="cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
 	
-	//Informa que esse elemento é uma coleção e que nome da tabela que armazenará as informações é TELEFONE.
+	//Informa que esse elemento é uma coleção, e que o nome da tabela que armazenará as informações será TELEFONE.
 	@ElementCollection
 	@CollectionTable(name="TELEFONE")
 	private Set<String> telefones = new HashSet<>();
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name="PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
 	
-	public Cliente () {}
+	public Cliente () {
+		addPerfil(Perfil.CLIENTE);
+	}
 	
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
 		super();
@@ -50,6 +58,7 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCod();
 		this.senha = senha;
+		addPerfil(Perfil.CLIENTE);
 	}
 
 
@@ -132,6 +141,15 @@ public class Cliente implements Serializable{
 		this.senha = senha;
 	}
 
+	public Set<Perfil> getPerfis() {
+		//Retorna os perfis dos clientes fazendo a conversão com o Perfil.toEnum e transforma tudo em uma coleção
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
