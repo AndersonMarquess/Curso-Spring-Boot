@@ -74,12 +74,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	//Libera conexões de múltiplas fontes
+//	@Bean
+//	CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+//		cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//		
+//		final UrlBasedCorsConfigurationSource urlBased = new UrlBasedCorsConfigurationSource();
+//		urlBased.registerCorsConfiguration("/**", cors);
+//		
+//		return urlBased;
+//	}
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
-		final UrlBasedCorsConfigurationSource urlBased = new UrlBasedCorsConfigurationSource();
-		urlBased.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-		return urlBased;
-	}
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+}
 
 	//Realiza a criptografia da senha
 	@Bean
