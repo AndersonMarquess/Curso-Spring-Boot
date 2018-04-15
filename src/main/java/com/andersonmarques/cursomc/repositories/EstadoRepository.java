@@ -1,7 +1,10 @@
 package com.andersonmarques.cursomc.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.andersonmarques.cursomc.domain.Estado;
 
@@ -9,5 +12,7 @@ import com.andersonmarques.cursomc.domain.Estado;
 //Qual o tipo da classe/objeto que será buscado e qual é o ID desse objeto, neste caso nós definimos como Integer. 
 @Repository
 public interface EstadoRepository extends JpaRepository<Estado, Integer>{
-
+	
+	@Transactional(readOnly = true)
+	public List<Estado> findAllByOrderByNome();
 }

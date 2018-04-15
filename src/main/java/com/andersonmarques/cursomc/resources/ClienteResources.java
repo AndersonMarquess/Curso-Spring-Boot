@@ -32,7 +32,6 @@ public class ClienteResources {
 	@Autowired
 	private ClienteService service;
 	
-	
      //Associando a função ao Rest com método de get.
 	 //O value é o id que será informado na hora de buscar alguma informação
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
