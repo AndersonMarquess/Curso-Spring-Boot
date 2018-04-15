@@ -48,6 +48,9 @@ public class ClienteService {
 	@Value("${img.prefix.cliente.profile}")
 	private String prefix;
 	
+	@Value("${img.profile.size}")
+	private Integer size;
+	
 	//Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
 		UserSS user = UserService.authenticated();
@@ -147,6 +150,8 @@ public class ClienteService {
 		}
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropImageEmQuadro(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
 		String fileName = prefix + user.getId() + ".jpg";
 		
 		return s3Service.uploadFile(imageService.getInputStram(jpgImage, "jpg"), fileName, "image");
