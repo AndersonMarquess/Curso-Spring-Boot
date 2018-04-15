@@ -1,10 +1,12 @@
 package com.andersonmarques.cursomc.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +42,11 @@ public class ClienteService {
 	private BCryptPasswordEncoder passwordEnconder;
 	@Autowired
 	private S3Service s3Service;
+	@Autowired
+	private ImageService imageService;
+	
+	@Value("${img.prefix.cliente.profile}")
+	private String prefix;
 	
 	//Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
@@ -130,6 +137,8 @@ public class ClienteService {
 		clienteExistente.setEmail(novo.getEmail());
 	}
 	
+	
+	//Envia uma imagem
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
 		
 		UserSS user = UserService.authenticated();
@@ -137,10 +146,9 @@ public class ClienteService {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
-		URI uri = s3Service.uploadFile(multipartFile);
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		String fileName = prefix + user.getId() + ".jpg";
 		
-		Optional<Cliente> cliente = repositorio.findById(user.getId());
-		cliente.get().setImagemURL(uri.toString());
-		return uri;
+		return s3Service.uploadFile(imageService.getInputStram(jpgImage, "jpg"), fileName, "image");
 	}
 }

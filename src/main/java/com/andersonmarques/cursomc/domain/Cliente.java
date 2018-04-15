@@ -26,8 +26,6 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
-	private String imagemURL;
-	
 	@JsonIgnore
 	private String senha;
 
@@ -177,13 +175,4 @@ public class Cliente implements Serializable{
 			return false;
 		return true;
 	}
-
-	public String getImagemURL() {
-		return imagemURL;
-	}
-
-	public void setImagemURL(String imagemURL) {
-		this.imagemURL = imagemURL;
-	}
-	
 }
