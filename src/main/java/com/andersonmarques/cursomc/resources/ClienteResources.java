@@ -45,6 +45,14 @@ public class ClienteResources {
 	}
 	
 	
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<Cliente> find (@RequestParam(value="value") String email){
+		Cliente obj = service.findByEmail(email);
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	
+	
 	//função que vai receber em formato Json, e com a anotação transformará em um objeto se ela for valida.
 	//CRIANDO um novo cliente
 	@RequestMapping(method=RequestMethod.POST)

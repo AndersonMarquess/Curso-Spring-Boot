@@ -54,7 +54,7 @@ public class ClienteService {
 	//Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
 		UserSS user = UserService.authenticated();
-		if((user == null || !user.hasRole(Perfil.ADMIN))&& !id.equals(user.getId())) {
+		if((user == null || !user.hasRole(Perfil.ADMIN)) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
@@ -98,6 +98,22 @@ public class ClienteService {
 	//Retorna todas os cliente
 	public List<Cliente> findAll(){
 		return repositorio.findAll();
+	}
+	
+	//Buscar cliente por email
+	public Cliente findByEmail(String email) {
+		UserSS user = UserService.authenticated();
+		
+		if((user == null || !user.hasRole(Perfil.ADMIN)) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		Cliente cliente = repositorio.findByEmail(email);
+		if(cliente == null) {
+			throw new ObjectNotFoundException("O Objeto não foi contrado, ID: "+user.getId()+
+					", Tipo: "+Cliente.class.getName());
+		}
+		return cliente;
 	}
 		
 	//Buscar informações dos cliente dividido em paginação
