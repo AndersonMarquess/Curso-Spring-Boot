@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.andersonmarques.cursomc.domain.Cliente;
@@ -83,7 +84,7 @@ public class ClienteResources {
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.GET)
-	//Neste caso ele retorna todas os cliente cadastrados ou uma exception
+	//Neste caso ele retorna todas os cliente cadastrado ou uma exception
 	public ResponseEntity<List<ClienteDTO>> findAll () {
 		
 		//FindAll retorna uma LISTA de clientes
@@ -114,5 +115,12 @@ public class ClienteResources {
 		//será criado uma clienteDTO para cada objeto da Page
 		Page<ClienteDTO> objDTOs = objs.map(objeto -> new ClienteDTO(objeto));
 		return ResponseEntity.ok().body(objDTOs);
+	}
+	
+	//Enviar imagem de perfil
+	@RequestMapping(value="/picture", method=RequestMethod.POST)
+	public ResponseEntity<Void> uploadProfilePicture (@RequestParam(name="file")MultipartFile multipartFile) {
+		URI uri = service.uploadProfilePicture(multipartFile);
+		return ResponseEntity.created(uri).build();
 	}
 }
