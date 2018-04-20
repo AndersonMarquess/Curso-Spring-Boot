@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,6 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public static final String[] PUBLIC_MATCHERS_GET = {"/produtos/**", "/categorias/**", "/estados/**"};
 	
 	public static final String[] PUBLIC_MATCHERS_POST = {"/clientes", "/clientes/picture", "/auth/forgot/**" };
+	
+	//Libera o swagger
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
+				"/swagger-ui.html", "/webjars/**");
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -74,16 +82,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	//Libera conexões de múltiplas fontes
-//	@Bean
-//	CorsConfigurationSource corsConfigurationSource() {
-//		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
-//		cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//		
-//		final UrlBasedCorsConfigurationSource urlBased = new UrlBasedCorsConfigurationSource();
-//		urlBased.registerCorsConfiguration("/**", cors);
-//		
-//		return urlBased;
-//	}
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
