@@ -22,6 +22,10 @@ import com.andersonmarques.cursomc.domain.Categoria;
 import com.andersonmarques.cursomc.dto.CategoriaDTO;
 import com.andersonmarques.cursomc.services.CategoriaService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 //Anotação do controlador rest
 @RestController
 @RequestMapping(value="/categorias")
@@ -31,6 +35,8 @@ public class CategoriaResources {
 	private CategoriaService service;
 	
 	
+	//Essa anotação serve para descrever esse endpoint na documentação
+	@ApiOperation(value="Busca por id")
      //Associando a função ao Rest com método de get.
 	 //O value é o id que será informado na hora de buscar alguma informação
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
@@ -43,7 +49,7 @@ public class CategoriaResources {
 	}
 	
 	
-	
+	@ApiOperation(value="Cria uma categoria")
 	//função que vai receber em formato Json, e com a anotação transformará em um objeto se ela for valida.
 	//CRIANDO uma categoria
 	//Apenas Administradores podera usar o post
@@ -63,7 +69,7 @@ public class CategoriaResources {
 	}
 	
 	
-	
+	@ApiOperation(value="Atualiza uma categoria")
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	//função que vai receber em formato Json e ATUALIZAR o nome de uma categoria já existente
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
@@ -75,7 +81,11 @@ public class CategoriaResources {
 	}
 	
 	
-	
+	@ApiOperation(value="Remove uma categoria")
+	//Mensagem especifica para essa função na documentação
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Não é possível excluir uma categoria que possui produtos"),
+			@ApiResponse(code = 404, message = "Código inexistente") })
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	//função que vai receber em formato Json e remover o objeto
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
@@ -85,6 +95,7 @@ public class CategoriaResources {
 	}
 	
 	
+	@ApiOperation(value="Buscar todas as categorias")
 	@RequestMapping(method=RequestMethod.GET)
 	//Neste caso ele retorna todas as categoria cadastradas ou uma exception
 	public ResponseEntity<List<CategoriaDTO>> findAll () {
@@ -99,7 +110,7 @@ public class CategoriaResources {
 	}
 	
 	
-	
+	@ApiOperation(value="Retorna as categorias de acordo com a páginação")
 	//Vai retornar as categorias de acordo com página
 	@RequestMapping(value="/page", method=RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaDTO>> findPage (
